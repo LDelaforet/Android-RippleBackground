@@ -1,6 +1,7 @@
 plugins {
+    // https://mvnrepository.com/artifact/com.android.library/com.android.library.gradle.plugin
     id("com.android.library") version "8.0.0" apply true
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply true
+    id("org.jetbrains.kotlin.android") version "1.6.10"
     id("maven-publish")
 }
 
@@ -11,8 +12,16 @@ android {
     defaultConfig {
         minSdk = 25
         targetSdk = 33
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     buildTypes {
@@ -23,24 +32,20 @@ android {
                 "proguard-rules.pro"
             )
         }
-        flavorDimensions("mode")
-        productFlavors {
-            create("full") {}
-            create("demo") {}
-        }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+    flavorDimensions("mode")
+    productFlavors {
+        create("full") {}
+        create("demo") {}
     }
 }
 
 dependencies {
+    implementation("com.android.library:com.android.library.gradle.plugin:8.0.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    implementation("com.github.dcendents:android-maven-gradle-plugin:2.1")
     implementation("androidx.appcompat:appcompat-resources:1.6.0")
     implementation("androidx.appcompat:appcompat:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -57,19 +62,18 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("fullRelease") {
-                from(components["fullRelease"])
+publishing {
+    publications {
+        create<MavenPublication>("fullRelease") {
+            from(components["fullRelease"])
 
-                groupId = "com.ldelaforet.rippleBackground"
-                artifactId = "rippleBackground"
-                version = "1.0"
-            }
+            groupId = "com.ldelaforet.rippleBackground"
+            artifactId = "rippleBackground"
+            version = "1.0"
         }
-        repositories {
-            mavenLocal() // Utilisez mavenLocal pour publier localement
-        }
+    }
+
+    repositories {
+        mavenLocal() // Utilisez mavenLocal pour publier localement
     }
 }

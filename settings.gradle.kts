@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Ripple Background"
-include(":rippleBackground")
+rootProject.name = "rippleBackground"
+include("rippleBackground")

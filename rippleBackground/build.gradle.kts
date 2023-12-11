@@ -1,7 +1,7 @@
 plugins {
     // https://mvnrepository.com/artifact/com.android.library/com.android.library.gradle.plugin
-    id("com.android.library") version "8.0.0" apply true
-    id("org.jetbrains.kotlin.android") version "1.6.10"
+    id("com.android.library") version "8.0.0"
+    id("org.jetbrains.kotlin.android") version "1.9.0"
     id("maven-publish")
 }
 
@@ -37,7 +37,13 @@ android {
     flavorDimensions("mode")
     productFlavors {
         create("full") {}
-        create("demo") {}
+    }
+
+    libraryVariants.all {
+        // Assurez-vous que le composant 'fullRelease' est généré
+        if (name == "fullRelease") {
+            // Configurations spécifiques au composant 'fullRelease', le cas échéant
+        }
     }
 }
 
@@ -62,18 +68,21 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("fullRelease") {
-            from(components["fullRelease"])
 
-            groupId = "com.ldelaforet.rippleBackground"
-            artifactId = "rippleBackground"
-            version = "1.0"
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("fullRelease") {
+                from(components["fullRelease"])
+
+                groupId = "com.ldelaforet.rippleBackground"
+                artifactId = "rippleBackground"
+                version = "1.0"
+            }
         }
-    }
 
-    repositories {
-        mavenLocal() // Utilisez mavenLocal pour publier localement
+        repositories {
+            mavenLocal() // Utilisez mavenLocal pour publier localement
+        }
     }
 }
